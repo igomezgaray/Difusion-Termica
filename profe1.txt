@@ -1,0 +1,37 @@
+function config(mux)
+
+ScanInterval = 2;%  Delay (in secs) between scans
+numberScans = 6;%  Number of scan sweeps to measure 
+channelDelay = 0.2;%  Delay (in secs) between relay closure and measurement
+scanList= '(@101,102)';%List of channels to scan in each scan
+
+%set the channel list to scan
+str=sprintf('ROUTESCAN %s',scanList);
+fprintf(mux,str);
+
+%query number of channels to scan
+j=query(mux,'ROUTESCANSIZE');
+ncanales=str2double(j);
+
+fprintf(mux,'FORMATREADINGCHAN ON');%  Return channel number with each reading
+fprintf(mux,'FORMATREADINGTIME ON');% Return time stamp with each reading
+fprintf(mux,'FORMATREADINGTIMETYPE REL');% Return time stamp im seconds since scanstart
+%fprintf(mux,'FORMATREADINGTIMETYPE ABS');% Return time stamp absolute
+
+
+
+% Set the delay (in seconds) between relay closure and measurement
+str=sprintf('ROUTCHANDELAY %2.1f , %s',channelDelay,scanList);
+fprintf(mux,str);
+
+%  Number of scan sweeps to measure 
+str=sprintf('TRIGCOUNT %d',numberScans);%
+fprintf(mux,str);
+
+%
+fprintf(mux,'TRIGSOUR TIMER');
+
+% Delay (in secs) between scans
+str=sprintf('TRIGTIMER %1.1f',ScanInterval);
+fprintf(mux,str);
+end
