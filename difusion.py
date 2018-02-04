@@ -19,18 +19,17 @@ datos=np.loadtxt('C:/Users/ferchi/.spyder-py3/labo/Mediciones/difusion/DATA2.txt
 tiempo2=np.loadtxt('C:/Users/ferchi/.spyder-py3/labo/Mediciones/difusion/tiempos3.txt', delimiter = ',')
 datos2=np.loadtxt('C:/Users/ferchi/.spyder-py3/labo/Mediciones/difusion/datos3.txt', delimiter = ',')
 
+#la medicion 1 finalizo a las 12:32:42, adapto los tiempos a ese reloj (en segundos)
 tiempo_fin1=12*3600+32*60+42
 tiempo_inicio1=tiempo_fin1-tiempo[5,-1]
 
-tiempo_fin2=12*3600+59*60+60
-tiempo_inicio2=tiempo_fin2-tiempo[5,-1]
-
-tiempo2=tiempo2+tiempo_inicio2-tiempo_inicio1
-
-#¢junto las matrices de ambas mediciones
+#la segunda medicion finalizo a las 13:01:45, adapto los tiempos a ese reloj (en segundos)
+tiempo_fin2=13*3600+1*60+45
+tiempo_inicio2=tiempo_fin2-tiempo2[5,-1]
+tiempo2=tiempo2+tiempo_inicio2-tiempo_inicio1 #así, los tiempos 1 y 2 ya son coherentes, y el origen temporal es en 0s
+#ahora junto las matrices de ambas mediciones
 tiempo=np.c_[tiempo, tiempo2]
 datos=np.c_[datos, datos2]
-
 
 #cada fila de "datos" corresponde a un canal
 
@@ -66,9 +65,6 @@ while i<d:
     if abs(datos[0,i]-datos[0,i+1])>1:
         datos[6,i+1]=datos[6,i]
     i=i+1
-   
-   
-     
      
 '''
 plt.plot(tiempo[0,:],datos[0,:],'r.', label = 'CH6')
@@ -79,7 +75,6 @@ plt.plot(tiempo[4,:],datos[4,:],'b.', label = 'CH2')
 plt.plot(tiempo[5,:],datos[5,:],'g.', label = 'CH1')
 '''
 #ploteo
-
 
 plt.plot(tiempo[0,:],datos[0,:],'r-', label = 'CH6')
 plt.plot(tiempo[1,:],datos[1,:],'b-', label = 'CH5')
